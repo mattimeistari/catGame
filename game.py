@@ -1,3 +1,4 @@
+# Import Libraries
 import pygame
 import random
 from pygame import mixer
@@ -5,8 +6,17 @@ import time
 import math
 import pickle
 
-# mixer srtup
+# Start mixer
 mixer.init()
+mixer.music.load(f"sound/aquire.mp3")
+mixer.music.load(f"sound/gem.mp3")
+
+# Hard set values #
+score = 0
+level = 1
+FPS = 60
+
+# Functions
 
 
 def play(soundfile):
@@ -20,33 +30,37 @@ def restart():
     return
 
 
-# Setja upp leikinn
+# Setja upp playarea #
 pygame.init()
 win = pygame.display.set_mode((1280, 720))
 pygame.display.set_caption("FLOTTASTI LEIKUR IN THE WORLD")
-score = 0
 
-# Búa til bakgrunn
+# Backgrounds #
 background = pygame.image.load("images/grass.jpg")
-win.blit(background, (0, 0))  # fill the window with the background color
+win.blit(background, (0, 0))
+
+# Win background
 random_number = random.randint(0, 4)
 image_path = (f"images/cheer{random_number}.jpg")
 
-# Búa til leturgerð
+# All text and buttons #
+
+# Create fonts
 font = pygame.font.SysFont("Arial", 32)
 font1 = pygame.font.SysFont("Arial", 62)
 
-# Byrja upp á nýtt takki
+# Retry button
 retry_text = font1.render("Next Levle", True, (195, 153, 64))
 retry_button_rect = pygame.Rect(300, 300, 205, 80)
 retry_button_color = (50, 50, 50)
 
-# Búa til textayfirborð
-text = font.render(f"Kettir náðir: {score}", True, (255, 255, 255))  # render the text to a surface with black color
-text_rect = text.get_rect()  # get the rectangle of the text surface
-text_rect.center = (640, 600)  # set the center of the text rectangle to the center of the window
+# Create cats collected constant text
+text = font.render(f"Kettir náðir: {score}", True, (255, 255, 255))
+text_rect = text.get_rect()
+text_rect.center = (640, 600)
 win.blit(text, text_rect)
 
+# Create win text
 win_text = font1.render("Yuo Win!", True, (255, 255, 255))
 win_text_rect = text.get_rect()
 win_text_rect.center = (640, 320)
@@ -57,13 +71,11 @@ player_width = 100
 player_height = 100
 player_x = win.get_width() / 2 - player_width / 2
 player_y = win.get_height() / 2 - player_height / 2
-FPS = 60
 
 # Load the three images and generate their random positions
 images = []
 image_rects = []
 # for i in range(1, 4+level)
-level = 10
 if level > 4:
     level = 4
 
@@ -76,7 +88,8 @@ for i in range(1, cats_total):
     images.append(image)
     image_rects.append(image_rect)
 
-# leikjar lúpa
+
+# Game Loop
 clock = pygame.time.Clock()
 running = True
 while running:
@@ -147,6 +160,5 @@ while running:
     pygame.display.update()
 
     clock.tick(FPS)  # Hraði
-
 
 pygame.quit()
