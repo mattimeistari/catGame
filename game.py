@@ -9,7 +9,7 @@ import pickle
 
 # Start mixer
 mixer.init()
-aquire = mixer.Sound(f"sound/aquire.wav")
+acquire = mixer.Sound(f"sound/acquire.wav")
 
 win_song = mixer.Sound(f"sound/gem.wav")
 
@@ -18,6 +18,9 @@ score = 0
 level = 1
 FPS = 60
 cats_total = (level + 3)
+
+WINDOW_WIDTH = 1280
+WINDOW_HEIGHT = 720
 
 # Functions
 
@@ -35,11 +38,12 @@ def generate_cats():
         image_rect.y = random.randint(0, 620)
         images.append(image)
         image_rects.append(image_rect)
-        
+
 
 def restart():
     global score
     global level
+
     level = level
     score = 0
     player_x = win.get_width() / 2 - player_width / 2
@@ -50,7 +54,7 @@ def restart():
     generate_cats()
     text = font.render(f"Kettir náðir: {score}", True, (255, 255, 255))
     win.blit(text, text_rect)
-    
+
 # Setja upp playarea #
 pygame.init()
 win = pygame.display.set_mode((1280, 720))
@@ -147,7 +151,7 @@ while running:
                 text = font.render(f"Kettir náðir: {score}", True, (255, 255, 255))
                 win.blit(text, text_rect)
                 print(f"cat {i+1} collected")
-                aquire.play()
+                acquire.play()
                 win.blit(background, image_rect)  # redraw the background over the image
                 image_rects.remove(image_rect)  # remove the image from the list
 
@@ -172,7 +176,7 @@ while running:
         pygame.display.flip()  # update the display with the changes made
 
     else:
-        win_song.play()
+        win_song.play(0)
         winbackground = pygame.image.load(image_path)
         win.blit(winbackground, (0, 0))
         win.blit(win_text, win_text_rect)
@@ -181,8 +185,6 @@ while running:
         mouse_pos = pygame.mouse.get_pos()
         if event.type == pygame.MOUSEBUTTONDOWN and button_rect.collidepoint(mouse_pos):
             restart()
-        
-        
 
     pygame.display.update()
 
