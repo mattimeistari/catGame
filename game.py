@@ -42,16 +42,14 @@ def restart():
     global level
     level = level
     score = 0
-    text = font.render(f"Kettir náðir: {score}", True, (255, 255, 255))
-    win.blit(text, text_rect)
     player_x = win.get_width() / 2 - player_width / 2
     player_y = win.get_height() / 2 - player_height / 2
     # Load the three images and generate their random positions
-
-    # for i in range(1, 4+level)
     if level > 4:
         level = 4
     generate_cats()
+    text = font.render(f"Kettir náðir: {score}", True, (255, 255, 255))
+    win.blit(text, text_rect)
     
 # Setja upp playarea #
 pygame.init()
