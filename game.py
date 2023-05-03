@@ -6,30 +6,53 @@ import time
 import math
 import pickle
 
+
 # Start mixer
 mixer.init()
-mixer.music.load(f"sound/aquire.mp3")
-mixer.music.load(f"sound/gem.mp3")
+aquire = mixer.Sound(f"sound/aquire.wav")
+
+win_song = mixer.Sound(f"sound/gem.wav")
 
 # Hard set values #
 score = 0
 level = 1
 FPS = 60
+cats_total = (level + 3)
 
 # Functions
 
 
-def play(soundfile):
+def generate_cats():
+    global images
+    global image_rects
 
-    mixer.music.load(f"sound/{soundfile}")
-    mixer.music.play()
-
+    images = []
+    image_rects = []
+    for i in range(1, cats_total):
+        image = pygame.image.load(f"images/image{random.randint(1, 3)}.png")
+        image_rect = image.get_rect()
+        image_rect.x = random.randint(0, 1180)
+        image_rect.y = random.randint(0, 620)
+        images.append(image)
+        image_rects.append(image_rect)
+        
 
 def restart():
+    global score
+    global level
+    level = level
+    score = 0
+    text = font.render(f"Kettir náðir: {score}", True, (255, 255, 255))
+    win.blit(text, text_rect)
+    player_x = win.get_width() / 2 - player_width / 2
+    player_y = win.get_height() / 2 - player_height / 2
+    # Load the three images and generate their random positions
 
-    return
-
-
+    # for i in range(1, 4+level)
+    if level > 4:
+        level = 4
+    generate_cats()
+    
 # Setja upp playarea #
 pygame.init()
 win = pygame.display.set_mode((1280, 720))
@@ -49,11 +72,6 @@ image_path = (f"images/cheer{random_number}.jpg")
 font = pygame.font.SysFont("Arial", 32)
 font1 = pygame.font.SysFont("Arial", 62)
 
-# Retry button
-retry_text = font1.render("Next Levle", True, (195, 153, 64))
-retry_button_rect = pygame.Rect(300, 300, 205, 80)
-retry_button_color = (50, 50, 50)
-
 # Create cats collected constant text
 text = font.render(f"Kettir náðir: {score}", True, (255, 255, 255))
 text_rect = text.get_rect()
@@ -65,6 +83,19 @@ win_text = font1.render("Yuo Win!", True, (255, 255, 255))
 win_text_rect = text.get_rect()
 win_text_rect.center = (640, 320)
 
+# Create button constants
+BUTTON_WIDTH = 200
+BUTTON_HEIGHT = 50
+BUTTON_COLOR = (0, 255, 0)
+BUTTON_TEXT = "Restart"
+
+# Create button rect and text objects
+button_rect = pygame.Rect((win.get_width() - BUTTON_WIDTH) // 2, (win.get_height() - BUTTON_HEIGHT) // 2, BUTTON_WIDTH, BUTTON_HEIGHT)
+button_text = font.render(BUTTON_TEXT, True, (255, 255, 255))
+button_text_rect = button_text.get_rect(center=button_rect.center)
+
+
+
 # Leikmaður
 player_image = pygame.image.load("images/player.jpg")
 player_width = 100
@@ -73,20 +104,10 @@ player_x = win.get_width() / 2 - player_width / 2
 player_y = win.get_height() / 2 - player_height / 2
 
 # Load the three images and generate their random positions
-images = []
-image_rects = []
 # for i in range(1, 4+level)
 if level > 4:
     level = 4
-
-cats_total = (level + 3)
-for i in range(1, cats_total):
-    image = pygame.image.load(f"images/image{random.randint(1, 3)}.png")
-    image_rect = image.get_rect()
-    image_rect.x = random.randint(0, 1180)
-    image_rect.y = random.randint(0, 620)
-    images.append(image)
-    image_rects.append(image_rect)
+generate_cats()
 
 
 # Game Loop
@@ -98,6 +119,7 @@ while running:
             running = False
 
     if score != (cats_total-1):
+
         # Hreyfing
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a]:
@@ -127,7 +149,7 @@ while running:
                 text = font.render(f"Kettir náðir: {score}", True, (255, 255, 255))
                 win.blit(text, text_rect)
                 print(f"cat {i+1} collected")
-                play('aquire.mp3')
+                aquire.play()
                 win.blit(background, image_rect)  # redraw the background over the image
                 image_rects.remove(image_rect)  # remove the image from the list
 
@@ -152,10 +174,17 @@ while running:
         pygame.display.flip()  # update the display with the changes made
 
     else:
+        win_song.play()
         winbackground = pygame.image.load(image_path)
         win.blit(winbackground, (0, 0))
         win.blit(win_text, win_text_rect)
-        play("gem.mp3")
+        pygame.draw.rect(win, BUTTON_COLOR, button_rect)
+        win.blit(button_text, button_text_rect)
+        mouse_pos = pygame.mouse.get_pos()
+        if event.type == pygame.MOUSEBUTTONDOWN and button_rect.collidepoint(mouse_pos):
+            restart()
+        
+        
 
     pygame.display.update()
 
