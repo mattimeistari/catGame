@@ -2,15 +2,23 @@
 import pygame
 import random
 from pygame import mixer
-import time
 import math
 import pickle
+import os
+
+# Total #
+
+if os.path.exists("total.pkl"):
+    with open("total.pkl", "rb") as f:
+        number = pickle.load(f)
+
+else:
+    number = 0
 
 
 # Start mixer
 mixer.init()
 acquire = mixer.Sound(f"sound/acquire.wav")
-
 win_song = mixer.Sound(f"sound/gem.wav")
 
 # Hard set values #
@@ -45,6 +53,9 @@ def restart():
     global level
 
     level = level
+    number = score
+    with open("total.pkl", "wb") as f:
+        pickle.dump(number, f)
     score = 0
     player_x = win.get_width() / 2 - player_width / 2
     player_y = win.get_height() / 2 - player_height / 2
@@ -55,9 +66,10 @@ def restart():
     text = font.render(f"Kettir náðir: {score}", True, (255, 255, 255))
     win.blit(text, text_rect)
 
+
 # Setja upp playarea #
 pygame.init()
-win = pygame.display.set_mode((1280, 720))
+win = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("FLOTTASTI LEIKUR IN THE WORLD")
 
 # Backgrounds #
@@ -95,7 +107,6 @@ BUTTON_TEXT = "Restart"
 button_rect = pygame.Rect((win.get_width() - BUTTON_WIDTH) // 2, (win.get_height() - BUTTON_HEIGHT) // 2, BUTTON_WIDTH, BUTTON_HEIGHT)
 button_text = font.render(BUTTON_TEXT, True, (255, 255, 255))
 button_text_rect = button_text.get_rect(center=button_rect.center)
-
 
 
 # Leikmaður
@@ -160,7 +171,6 @@ while running:
 
         # Teikna leikinn
         win.blit(background, (0, 0))  # grass
-
         win.blit(text, text_rect)
 
         # Define the player sprite position with a margin of 100x100
