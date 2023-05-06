@@ -8,3 +8,4 @@
 > Fix 3 collected
 > Settings menu pop up top right button toggle
 > Make player branch for Sara with working versions
+> if exit is pressed also update "number"
