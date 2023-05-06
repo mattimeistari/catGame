@@ -13,6 +13,7 @@ if os.path.exists("total.pkl"):
         number = pickle.load(f)
 
 else:
+    print("New total file created successfully")
     number = 0
 
 
@@ -25,10 +26,10 @@ win_song = mixer.Sound(f"sound/gem.wav")
 score = 0
 level = 1
 FPS = 60
-cats_total = (level + 3)
 
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
+cats_total = random.randint(4, 7)
 
 # Functions
 
@@ -51,7 +52,9 @@ def generate_cats():
 def restart():
     global score
     global level
+    global cats_total
 
+    cats_total = random.randint(4, 7)
     level = level
     number = score
     with open("total.pkl", "wb") as f:
@@ -95,7 +98,7 @@ win.blit(text, text_rect)
 # Create win text
 win_text = font1.render("Yuo Win!", True, (255, 255, 255))
 win_text_rect = text.get_rect()
-win_text_rect.center = (640, 320)
+win_text_rect.center = (615, 320)
 
 # Create button constants
 BUTTON_WIDTH = 200
@@ -104,7 +107,7 @@ BUTTON_COLOR = (0, 255, 0)
 BUTTON_TEXT = "Restart"
 
 # Create button rect and text objects
-button_rect = pygame.Rect((win.get_width() - BUTTON_WIDTH) // 2, (win.get_height() - BUTTON_HEIGHT) // 2, BUTTON_WIDTH, BUTTON_HEIGHT)
+button_rect = pygame.Rect((win.get_width() - BUTTON_WIDTH) // 2, (win.get_height() - BUTTON_HEIGHT) // 2 + 70, BUTTON_WIDTH, BUTTON_HEIGHT)
 button_text = font.render(BUTTON_TEXT, True, (255, 255, 255))
 button_text_rect = button_text.get_rect(center=button_rect.center)
 
@@ -131,7 +134,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    if score != (cats_total-1):
+    if image_rects:
 
         # Hreyfing
         keys = pygame.key.get_pressed()
@@ -189,9 +192,11 @@ while running:
         win_song.play(0)
         winbackground = pygame.image.load(image_path)
         win.blit(winbackground, (0, 0))
+
         win.blit(win_text, win_text_rect)
         pygame.draw.rect(win, BUTTON_COLOR, button_rect)
         win.blit(button_text, button_text_rect)
+
         mouse_pos = pygame.mouse.get_pos()
         if event.type == pygame.MOUSEBUTTONDOWN and button_rect.collidepoint(mouse_pos):
             restart()
