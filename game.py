@@ -86,9 +86,10 @@ def add_total():
 
 
 def restart():
-    global score, level, cats_total, background, text, player_x, player_y
+    global score, level, cats_total, background
+    global text, player_x, player_y, level_text
 
-    background = pygame.image.load(f"images/bg{random.randint(0, 8)}.jpg")
+    background = pygame.image.load(f"images/bg{random.randint(1, 10)}.jpg")
     cats_total = random.randint(4, 7)
     level += 1
 
@@ -99,6 +100,10 @@ def restart():
     generate_cats()
     text = font.render(f"Kettir náðir: {score}", True, (255, 255, 255))
     win.blit(text, text_rect)
+    level_text = font.render(
+        f"Level: {level}", True,
+        (255, 255, 255),
+    )
 
 
 # Setja upp playarea #
@@ -126,13 +131,21 @@ text_rect = text.get_rect()
 text_rect.center = (640, 600)
 win.blit(text, text_rect)
 
+# Create level counter
+level_text = font.render(
+    f"Level: {level}", True,
+    (255, 255, 255),
+)
+level_text_rect = level_text.get_rect()
+level_text_rect.center = (100, 680)
+
 # Create total cats collected text
 total_text = font.render(
     f"Kettir rescured in total: {number}", True,
     (255, 255, 255),
 )
-total_text_rect = text.get_rect()
-total_text_rect.center = (570, 500)
+total_text_rect = total_text.get_rect()
+total_text_rect.center = (640, 500)
 
 # Create win text
 win_text = font1.render("Yuo Win!", True, (255, 255, 255))
@@ -245,6 +258,7 @@ while running:
         # Teikna leikinn
         win.blit(background, (0, 0))  # level background
         win.blit(text, text_rect)
+        win.blit(level_text, level_text_rect)
 
         # Define the player sprite position with a margin of 100x100
         player_rect = pygame.Rect(
