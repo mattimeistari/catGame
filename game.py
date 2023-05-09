@@ -1,11 +1,11 @@
-# Import Libraries
-import pygame
+""" Import Libraries """
 import random
 from random import choice
-from pygame import mixer
-import math
 import pickle
+import math
 import os
+import pygame
+from pygame import mixer
 
 # Total #
 
@@ -19,8 +19,8 @@ else:
 
 # Start mixer
 mixer.init()
-acquire = mixer.Sound(f"sound/acquire.wav")
-win_song = mixer.Sound(f"sound/gem.wav")
+acquire = mixer.Sound("sound/acquire.wav")
+win_song = mixer.Sound("sound/gem.wav")
 
 # Hard set values #
 score = 0
@@ -35,6 +35,8 @@ cats_total = random.randint(4, 7)
 
 
 def generate_cats():
+    """ Generate cats """
+
     global images
     global image_rects
     global player_x, player_y
@@ -73,19 +75,15 @@ def generate_cats():
 
 
 def update_score():
+    """ Update the score """
     global number  # Declare number as global
-    with open("total.pkl", "wb") as f:
-        pickle.dump(number, f)  # Save number to pickle file
-
-
-def add_total():
-    global number  # Declare number as global
-    number += 1  # Use and modify number
     with open("total.pkl", "wb") as f:
         pickle.dump(number, f)  # Save number to pickle file
 
 
 def restart():
+    """ Restart """
+
     global score, level, cats_total, background
     global text, player_x, player_y, level_text
 
