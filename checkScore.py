@@ -1,11 +1,15 @@
-import os
-import pickle
+import time
 
-if os.path.exists("total.pkl"):
-    with open("total.pkl", "rb") as f:
-        number = pickle.load(f)
+while True:
+    time.sleep(1)
+    import os
+    import pickle
 
-else:
-    number = 0
+    if os.path.exists("total.pkl"):
+        with open("total.pkl", "rb") as f:
+            number = pickle.load(f)
 
-print(number)
+    else:
+        number = 0
+
+    print(number)
